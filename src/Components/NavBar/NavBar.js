@@ -14,7 +14,7 @@ class NavBar extends Component {
 	}
 
 	axiosTest() {
-		axios.get('http://localhost:8000/api/test')
+		axios.get('https://localhost:8000/api/top')
 			.then(res => {
 				const test = res.data;
 				this.setState({result: test});

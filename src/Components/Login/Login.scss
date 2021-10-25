@@ -1,0 +1,23 @@
+.login {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    label {
+      display: block;
+      text-align: center;
+    }
+    input {
+      padding: .5rem 1rem;
+      border-radius: 10px;
+      border: 1px solid grey;
+      margin: 1rem 0;
+    }
+    input[type="submit"] {
+      cursor: pointer;
+    }
+  }
+}

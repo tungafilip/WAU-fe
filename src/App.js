@@ -7,6 +7,7 @@ import {
 import './App.css';
 import NavBar from "./Components/NavBar/NavBar";
 import Login from "./Components/Login/Login";
+import Register from "./Components/Register/Register";
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
             <Switch>
                 <Route path="/login">
                     <Login />
+                </Route>
+                <Route exact path="/register">
+                    <Register />
                 </Route>
                 <Route exact path="/">
                     <p>This is home page!</p>

@@ -8,7 +8,7 @@ import axios from "axios";
 const cookie = new Cookies();
 
 class Login extends Component {
-	componentDidMount() {
+	componentWillMount() {
 		if (cookie.get('user-api-key')) {
 			axios.post('https://localhost:8000/api/get/user/by/api', {
 				apiKey: cookie.get('user-api-key')
@@ -34,7 +34,7 @@ class Login extends Component {
 		}
 	}
 
-	usernameChangeHandler = (event) => {
+	emailChangeHandler = (event) => {
 		let email = event.target.value;
 		this.setState({email: email});
 	}
@@ -66,7 +66,7 @@ class Login extends Component {
 			<div className='login'>
 				<form onSubmit={this.formSubmitHandler}>
 					<label htmlFor="email">Email:</label>
-					<input onChange={this.usernameChangeHandler} type="email" id="email" placeholder="mark@mail.com" />
+					<input onChange={this.emailChangeHandler} type="email" id="email" placeholder="mark@mail.com" />
 					<label htmlFor="password">Password:</label>
 					<input onChange={this.passwordChangeHandler} type="password" id="password" placeholder="Min. 8 characters" />
 					<input type="submit" value="Login" />

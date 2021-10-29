@@ -4,6 +4,7 @@ import {
     Route,
     Link
 } from "react-router-dom";
+import {useSelector} from "react-redux";
 import './App.css';
 import NavBar from "./Components/NavBar/NavBar";
 import Login from "./Components/Login/Login";
@@ -12,10 +13,11 @@ import Loading from "./Components/Loading/Loading";
 import React from "react";
 
 function App() {
+  const loading = useSelector(state => state.loading.value);
   return (
     <div className="App">
         <Router>
-            <Loading />
+            { loading ? <Loading  /> : null}
             <NavBar/>
             <Switch>
                 <Route path="/login">

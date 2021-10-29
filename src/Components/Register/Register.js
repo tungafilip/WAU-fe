@@ -3,11 +3,11 @@ import {withRouter} from "react-router-dom";
 
 import './Register.scss';
 import axios from "axios";
+import RegisterForm from "./RegisterForm/RegisterForm";
 
 class Register extends Component {
 	constructor() {
 		super();
-
 		this.state = {
 			fname: '',
 			lname: '',
@@ -16,7 +16,10 @@ class Register extends Component {
 			password: '',
 			repassword: '',
 			gender: '',
-			age: ''
+			age: '',
+			emailError: '',
+			usernameError: '',
+			ageError: '',
 		}
 	}
 
@@ -43,9 +46,15 @@ class Register extends Component {
 		this.setState({gender: event.target.value});
 	}
 	ageChangeHandler = (event) => {
-		this.setState({age: event.target.value});
+		if (event.target.value < 18 || event.target.value > 70) {
+			this.setState({ageError: 'You need to be older than 18 and younger than 70 years.'});
+		} else {
+			this.setState({ageError: ''});
+			this.setState({age: event.target.value});
+		}
 	}
 
+	// Form Submit Handler
 	formSubmitHandler = (event) => {
 		event.preventDefault();
 		let password = this.state.password;
@@ -61,9 +70,31 @@ class Register extends Component {
 				gender: this.state.gender,
 				age: this.state.age,
 			}).then((response) => {
-				// this.props.history.push('/');
-				console.log('ss');
 				console.log(response.data);
+				console.log(response.data.usernameError);
+				console.log(response.data.emailError);
+				let error = false;
+				if (response.data.usernameError != null) {
+					this.setState({emailError: response.data.emailError})
+					error = true;
+					console.log(this.state.emailError);
+				}
+				if (response.data.usernameError != null) {
+					this.setState({usernameError: response.data.usernameError})
+					error = true;
+					console.log(this.state.usernameError);
+				}
+				if (this.state.age < 18 || this.state.age > 70) {
+					error = true;
+					this.setState({ageError: 'You need to be older than 18 and younger than 70 years.'});
+				}
+				if (response.data.ageError != null) {
+					error = true;
+					this.setState({ageError: response.data.ageError});
+				}
+				if (!error) {
+					this.props.history.push('/');
+				}
 			}).catch((error) => {
 				console.log(error);
 			})
@@ -73,30 +104,18 @@ class Register extends Component {
 	render() {
 		return (
 			<div className="register">
-				<form onSubmit={this.formSubmitHandler}>
-					<label htmlFor="fname">First name:</label>
-					<input onChange={this.fnameChangeHandler} type="text" id="fname" placeholder="Mark" />
-					<label htmlFor="lname">Last name:</label>
-					<input onChange={this.lnameChangeHandler} type="text" id="lname" placeholder="Markus" />
-					<label htmlFor="email">Email:</label>
-					<input onChange={this.emailChangeHandler} type="email" id="email" placeholder="mark@mail.com" />
-					<label htmlFor="username">Username:</label>
-					<input onChange={this.usernameChangeHandler} type="text" id="username" placeholder="markMarkus" />
-					<label htmlFor="password">Password:</label>
-					<input onChange={this.passwordChangeHandler} type="password" id="password" placeholder="Min. 8 characters" />
-					<label htmlFor="password">Repeat password:</label>
-					<input onChange={this.repasswordChangeHandler} type="password" id="repassword" placeholder="Passwords must match" />
-					<label>Gender:</label>
-					<div className="radioButtons" onChange={this.radioChangeHandler}>
-						<input type="radio" name="gender" value="male" id="male" />
-						<label htmlFor="male">Male</label>
-						<input type="radio" name="gender" value="female" id="female" />
-						<label htmlFor="female">Female</label>
-					</div>
-					<label htmlFor="password">Age:</label>
-					<input onChange={this.ageChangeHandler} type="number" min="13" max="150" id="age" placeholder="Min. 13" />
-					<input type="submit" value="Register" />
-				</form>
+				<RegisterForm
+					fnameChangeHandler={this.fnameChangeHandler}
+					lnameChangeHandler={this.lnameChangeHandler}
+					emailChangeHandler={this.emailChangeHandler}
+					usernameChangeHandler={this.usernameChangeHandler}
+					passwordChangeHandler={this.fnameChangeHandler}
+					repasswordChangeHandler={this.fnameChangeHandler}
+					radioChangeHandler={this.radioChangeHandler}
+					ageChangeHandler={this.ageChangeHandler}
+					formSubmitHandler={this.formSubmitHandler}
+					state={this.state}
+				/>
 			</div>
 		);
 	}

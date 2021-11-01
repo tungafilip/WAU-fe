@@ -57,6 +57,7 @@ class Register extends Component {
 	// Form Submit Handler
 	formSubmitHandler = (event) => {
 		event.preventDefault();
+		this.props.enableLoading(true);
 		let password = this.state.password;
 		let repassword = this.state.repassword;
 
@@ -70,14 +71,10 @@ class Register extends Component {
 				gender: this.state.gender,
 				age: this.state.age,
 			}).then((response) => {
-				console.log(response.data);
-				console.log(response.data.usernameError);
-				console.log(response.data.emailError);
 				let error = false;
 				if (response.data.usernameError != null) {
 					this.setState({emailError: response.data.emailError})
 					error = true;
-					console.log(this.state.emailError);
 				}
 				if (response.data.usernameError != null) {
 					this.setState({usernameError: response.data.usernameError})
@@ -95,6 +92,7 @@ class Register extends Component {
 				if (!error) {
 					this.props.history.push('/');
 				}
+				this.props.enableLoading(false);
 			}).catch((error) => {
 				console.log(error);
 			})

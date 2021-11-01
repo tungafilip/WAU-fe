@@ -1,11 +1,30 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import {withRouter} from "react-router-dom";
 
 import './Register.scss';
 import axios from "axios";
 import RegisterForm from "./RegisterForm/RegisterForm";
+import Cookies from "universal-cookie/es6";
+
+const cookie = new Cookies();
 
 class Register extends Component {
+	componentDidMount() {
+		if (cookie.get('user-api-key')) {
+			axios.post('https://localhost:8000/api/get/user/by/api', {
+				apiKey: cookie.get('user-api-key')
+			}).then((response) => {
+				if (response.data.delete) {
+					cookie.remove('user-api-key');
+				} else {
+					this.props.history.push('/');
+				}
+			}).catch((error) => {
+				console.log(error);
+			})
+		}
+	}
+
 	constructor() {
 		super();
 		this.state = {

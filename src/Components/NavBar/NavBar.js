@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 import './NavBar.scss';
 import axios from "axios";
 
@@ -24,12 +25,10 @@ class NavBar extends Component {
 	render() {
 		return (
 			<nav>
-				<ul>
-					<li onClick={this.axiosTest}>{ this.state.result }</li>
-					<li>Page #2</li>
-					<li>Page #3</li>
-					<li>Page #4</li>
-				</ul>
+				<Link to="/">Home</Link>
+				<Link to="/login">Login</Link>
+				<Link to="/register">Register</Link>
+				<Link to="/logout">Logout</Link>
 			</nav>
 		);
 	}

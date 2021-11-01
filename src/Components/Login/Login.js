@@ -19,7 +19,7 @@ const Login = (props) => {
 					console.log(response.data.delete);
 					cookie.remove('user-api-key');
 				} else {
-					this.props.history.push('/');
+					history.push('/');
 				}
 			}).catch((error) => {
 				console.log(error);

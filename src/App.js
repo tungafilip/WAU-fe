@@ -4,7 +4,8 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import { enable, disable } from "./Redux/loading";
 import './App.css';
 import NavBar from "./Components/NavBar/NavBar";
 import Login from "./Components/Login/Login";
@@ -14,17 +15,23 @@ import React from "react";
 
 function App() {
   const loading = useSelector(state => state.loading.value);
+  const dispatch = useDispatch();
+
+  const enableLoadingHandler = (enabled) => {
+      dispatch(enabled ? enable() : disable());
+  }
+
   return (
     <div className="App">
         <Router>
-            { loading ? <Loading  /> : null}
+            { loading ? <Loading/> : null}
             <NavBar/>
             <Switch>
                 <Route path="/login">
-                    <Login />
+                    <Login enableLoading={ enableLoadingHandler }/>
                 </Route>
                 <Route exact path="/register">
-                    <Register />
+                    <Register enableLoading={ enableLoadingHandler }/>
                 </Route>
                 <Route exact path="/">
                     <p>This is home page!</p>

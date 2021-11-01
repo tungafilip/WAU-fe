@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import Cookies from "universal-cookie/es6";
-import { useDispatch } from "react-redux";
-import { enable, disable } from "../../Redux/loading";
 
 import './Login.scss';
 import axios from "axios";
 
-const cookie = new Cookies();
-
-const Login = () => {
+const Login = (props) => {
+	const cookie = new Cookies();
+	const history = useHistory();
 
 	// Similar to componentDidMount and componentDidUpdate
 	useEffect(() => {
@@ -37,29 +35,32 @@ const Login = () => {
 
 	const emailChangeHandler = (event) => {
 		let email = event.target.value;
-		this.setState({email: email});
+		setEmail(email);
 	}
 
 	const passwordChangeHandler = (event) => {
 		let password = event.target.value;
-		this.setState({password: password});
+		setPassword(password);
 	}
 
 	const formSubmitHandler = (event) => {
 		event.preventDefault();
+		props.enableLoading(true);
 		axios.post('https://localhost:8000/api/login', {
 			email: email,
 			password: password,
-
 		}).then((response) => {
 			if (response.data.emailError) {
 				setPasswordError('');
 				setEmailError(response.data.emailError);
+				props.enableLoading(false);
 			} else if (response.data.passwordError) {
 				setEmailError('');
-				setPasswordError(response.data.passwordError)
+				setPasswordError(response.data.passwordError);
+				props.enableLoading(false);
 			} else if (response.data.userApiKey) {
 				cookie.set('user-api-key', response.data.userApiKey);
+				props.enableLoading(false);
 				history.push('/');
 			}
 		}).catch((error) => {

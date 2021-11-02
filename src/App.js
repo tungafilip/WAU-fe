@@ -1,8 +1,7 @@
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import { enable, disable } from "./Redux/loading";
@@ -41,5 +40,9 @@ function App() {
     </div>
   );
 }
+
+App.propTypes = {
+
+};
 
 export default App;

@@ -1,7 +1,20 @@
 import React, {Component} from 'react';
 import './RegisterForm.scss';
 
-class RegisterForm extends Component {
+type RegisterFormProps = {
+	formSubmitHandler: (event: React.FormEvent<HTMLFormElement>) => void;
+	fnameChangeHandler: (event: React.FormEvent<HTMLInputElement>) => void;
+	lnameChangeHandler: (event: React.FormEvent<HTMLInputElement>) => void;
+	emailChangeHandler: (event: React.FormEvent<HTMLInputElement>) => void;
+	usernameChangeHandler: (event: React.FormEvent<HTMLInputElement>) => void;
+	passwordChangeHandler: (event: React.FormEvent<HTMLInputElement>) => void;
+	repasswordChangeHandler: (event: React.FormEvent<HTMLInputElement>) => void;
+	radioChangeHandler: (event: React.FormEvent<HTMLInputElement>) => void;
+	ageChangeHandler: (event: React.FormEvent<HTMLInputElement>) => void;
+	state: React.ComponentState;
+}
+
+class RegisterForm extends Component<RegisterFormProps> {
 	render() {
 		return (
 			<div>

@@ -1,19 +1,39 @@
 import React, {Component, useEffect} from 'react';
+// @ts-ignore
 import {withRouter} from "react-router-dom";
-
 import './Register.scss';
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import RegisterForm from "./RegisterForm/RegisterForm";
 import Cookies from "universal-cookie/es6";
+import {object} from "prop-types";
 
 const cookie = new Cookies();
 
-class Register extends Component {
+type registerProps = {
+	history: any;
+	enableLoading: (value: boolean) => void;
+}
+type registerState = {
+	fname: string;
+	lname: string;
+	email: string;
+	username: string;
+	password: string;
+	repassword: string;
+	gender: string;
+	age: number;
+	emailError: string;
+	usernameError: string;
+	ageError: string;
+}
+
+class Register extends Component<registerProps, registerState> {
 	componentDidMount() {
 		if (cookie.get('user-api-key')) {
 			axios.post('https://localhost:8000/api/get/user/by/api', {
 				apiKey: cookie.get('user-api-key')
-			}).then((response) => {
+			}).then((response: AxiosResponse) => {
+				// @ts-ignore
 				if (response.data.delete) {
 					cookie.remove('user-api-key');
 				} else {
@@ -25,56 +45,61 @@ class Register extends Component {
 		}
 	}
 
-	constructor() {
-		super();
-		this.state = {
-			fname: '',
-			lname: '',
-			email: '',
-			username: '',
-			password: '',
-			repassword: '',
-			gender: '',
-			age: '',
-			emailError: '',
-			usernameError: '',
-			ageError: '',
-		}
+	state : registerState = {
+		fname: '',
+		lname: '',
+		email: '',
+		username: '',
+		password: '',
+		repassword: '',
+		gender: '',
+		age: 0,
+		emailError: '',
+		usernameError: '',
+		ageError: '',
 	}
 
 	// Input Change Handlers
-	fnameChangeHandler = (event) => {
-		this.setState({fname: event.target.value});
+	fnameChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+		const target = event.target as HTMLInputElement;
+		this.setState({fname: target.value});
 	}
-	lnameChangeHandler = (event) => {
-		this.setState({lname: event.target.value});
+	lnameChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+		const target = event.target as HTMLInputElement;
+		this.setState({lname: target.value});
 	}
-	emailChangeHandler = (event) => {
-		this.setState({email: event.target.value});
+	emailChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+		const target = event.target as HTMLInputElement;
+		this.setState({email: target.value});
 	}
-	usernameChangeHandler = (event) => {
-		this.setState({username: event.target.value});
+	usernameChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+		const target = event.target as HTMLInputElement;
+		this.setState({username: target.value});
 	}
-	passwordChangeHandler = (event) => {
-		this.setState({password: event.target.value});
+	passwordChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+		const target = event.target as HTMLInputElement;
+		this.setState({password: target.value});
 	}
-	repasswordChangeHandler = (event) => {
-		this.setState({repassword: event.target.value});
+	repasswordChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+		const target = event.target as HTMLInputElement;
+		this.setState({repassword: target.value});
 	}
-	radioChangeHandler = (event) => {
-		this.setState({gender: event.target.value});
+	radioChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+		const target = event.target as HTMLInputElement;
+		this.setState({gender: target.value});
 	}
-	ageChangeHandler = (event) => {
-		if (event.target.value < 18 || event.target.value > 70) {
+	ageChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+		const target = event.target as HTMLInputElement;
+		if (parseInt(target.value) < 18 || parseInt(target.value) > 70) {
 			this.setState({ageError: 'You need to be older than 18 and younger than 70 years.'});
 		} else {
 			this.setState({ageError: ''});
-			this.setState({age: event.target.value});
+			this.setState({age: parseInt(target.value)});
 		}
 	}
 
 	// Form Submit Handler
-	formSubmitHandler = (event) => {
+	formSubmitHandler = (event : React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		this.props.enableLoading(true);
 		let password = this.state.password;
@@ -91,11 +116,15 @@ class Register extends Component {
 				age: this.state.age,
 			}).then((response) => {
 				let error = false;
+				// @ts-ignore
 				if (response.data.usernameError != null) {
+					// @ts-ignore
 					this.setState({emailError: response.data.emailError})
 					error = true;
 				}
+				// @ts-ignore
 				if (response.data.usernameError != null) {
+					// @ts-ignore
 					this.setState({usernameError: response.data.usernameError})
 					error = true;
 					console.log(this.state.usernameError);
@@ -104,13 +133,16 @@ class Register extends Component {
 					error = true;
 					this.setState({ageError: 'You need to be older than 18 and younger than 70 years.'});
 				}
+				// @ts-ignore
 				if (response.data.ageError != null) {
 					error = true;
+					// @ts-ignore
 					this.setState({ageError: response.data.ageError});
 				}
 				if (!error) {
 					this.props.history.push('/');
 				}
+				console.log(response);
 				this.props.enableLoading(false);
 			}).catch((error) => {
 				console.log(error);
@@ -126,8 +158,8 @@ class Register extends Component {
 					lnameChangeHandler={this.lnameChangeHandler}
 					emailChangeHandler={this.emailChangeHandler}
 					usernameChangeHandler={this.usernameChangeHandler}
-					passwordChangeHandler={this.fnameChangeHandler}
-					repasswordChangeHandler={this.fnameChangeHandler}
+					passwordChangeHandler={this.passwordChangeHandler}
+					repasswordChangeHandler={this.repasswordChangeHandler}
 					radioChangeHandler={this.radioChangeHandler}
 					ageChangeHandler={this.ageChangeHandler}
 					formSubmitHandler={this.formSubmitHandler}

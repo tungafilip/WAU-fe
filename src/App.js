@@ -11,6 +11,7 @@ import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
 import Loading from "./Components/Loading/Loading";
 import React from "react";
+import SettingsForm from "./Components/Settings/SettingsForm/SettingsForm";
 
 function App() {
   const loading = useSelector(state => state.loading.value);
@@ -31,6 +32,9 @@ function App() {
                 </Route>
                 <Route exact path="/register">
                     <Register enableLoading={ enableLoadingHandler }/>
+                </Route>
+                <Route path="/settings">
+                    <SettingsForm/>
                 </Route>
                 <Route exact path="/">
                     <p>This is home page!</p>

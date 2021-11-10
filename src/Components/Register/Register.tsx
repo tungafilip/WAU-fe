@@ -21,10 +21,16 @@ type registerState = {
 	password: string;
 	repassword: string;
 	gender: string;
-	age: number;
+	day: number;
+	month: number;
+	year: number;
+	maxDay: number;
 	emailError: string;
 	usernameError: string;
 	ageError: string;
+	dayError: string;
+	monthError: string;
+	yearError: string;
 }
 
 class Register extends Component<registerProps, registerState> {
@@ -53,10 +59,16 @@ class Register extends Component<registerProps, registerState> {
 		password: '',
 		repassword: '',
 		gender: '',
-		age: 0,
+		day: 0,
+		month: 0,
+		year: 0,
+		maxDay: 0,
 		emailError: '',
 		usernameError: '',
 		ageError: '',
+		dayError: '',
+		monthError: '',
+		yearError: '',
 	}
 
 	// Input Change Handlers
@@ -88,13 +100,23 @@ class Register extends Component<registerProps, registerState> {
 		const target = event.target as HTMLInputElement;
 		this.setState({gender: target.value});
 	}
-	ageChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+	dayChangeHandler = (event : React.FormEvent<HTMLInputElement>) => {
+		const months31 = [1,3,5,7,8,10,12];
+		let is31 = false;
 		const target = event.target as HTMLInputElement;
-		if (parseInt(target.value) < 18 || parseInt(target.value) > 70) {
-			this.setState({ageError: 'You need to be older than 18 and younger than 70 years.'});
+		if (parseInt(target.value) === 2) {
+			this.setState({maxDay: 28});
 		} else {
-			this.setState({ageError: ''});
-			this.setState({age: parseInt(target.value)});
+			for (const month in months31) {
+				if (target.value === month) {
+					is31 = true;
+				}
+			}
+			if (is31) {
+				this.setState({maxDay: 31})
+			} else {
+				this.setState({maxDay: 30})
+			}
 		}
 	}
 

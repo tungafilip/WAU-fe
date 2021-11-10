@@ -14,11 +14,18 @@ type RegisterFormProps = {
 	state: React.ComponentState;
 }
 
+let date = new Date();
+let dd = String(date.getDate()).padStart(2, '0');
+let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+let yyyy = date.getFullYear();
+let dateString = yyyy+'-'+mm+'-'+dd;
+
 class RegisterForm extends Component<RegisterFormProps> {
+
 	render() {
 		return (
 			<div>
-				<form onSubmit={this.props.formSubmitHandler}>
+				<form onSubmit={this.props.formSubmitHandler} className="RegisterForm">
 					<label htmlFor="fname">First name:</label>
 					<input onChange={this.props.fnameChangeHandler} type="text" id="fname" placeholder="Mark" />
 					<label htmlFor="lname">Last name:</label>
@@ -40,7 +47,11 @@ class RegisterForm extends Component<RegisterFormProps> {
 						<input type="radio" name="gender" value="female" id="female" />
 						<label htmlFor="female">Female</label>
 					</div>
-					<label htmlFor="password">Age:</label>
+					<label htmlFor="password">Birthday:</label>
+					<div className='birthday'>
+						<input onChange={this.props.dayChangeHandler} className={this.props.state.dayError ? 'errorInput' : ''} type="number" min="1" max="31" id="age" placeholder="Min. 13" />
+					</div>
+					<input type="date" max={dateString} />
 					<input onChange={this.props.ageChangeHandler} className={this.props.state.ageError ? 'errorInput' : ''} type="number" min="18" max="150" id="age" placeholder="Min. 13" />
 					<span className={this.props.state.ageError ? 'errorSpan' : ''}>{this.props.state.ageError}</span>
 					<input type="submit" value="Register" />

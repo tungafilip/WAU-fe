@@ -1,0 +1,9 @@
+@import "src/Assets/css/cssLib";
+
+.SettingsForm {
+  .fullName {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}

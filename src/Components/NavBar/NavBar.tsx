@@ -14,7 +14,6 @@ let loginRegister : boolean;
 class NavBar extends Component<NavBarProps> {
 	componentDidUpdate() {
 		loginRegister = !cookie.get('user-api-key');
-		console.log(loginRegister);
 	}
 
 	logoutHandler = () => {
